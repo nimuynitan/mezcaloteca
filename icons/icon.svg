@@ -1,0 +1,20 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#1a1a1a" rx="90"/>
+  <g transform="translate(256, 285)">
+    <g fill="#e8e3d5">
+      <!-- 9 pencas de agave estilizadas, lanceoladas -->
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(0)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(40)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(80)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(120)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(160)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(200)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(240)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(280)"/>
+      <path d="M 0 -210 Q 32 -130, 22 -55 Q 0 -28, -22 -55 Q -32 -130, 0 -210" transform="rotate(320)"/>
+    </g>
+    <!-- Centro -->
+    <circle r="18" fill="#1a1a1a"/>
+    <circle r="8" fill="#e8e3d5"/>
+  </g>
+</svg>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Colección personal de mezcales artesanales y ancestrales">
+<title>Mezcaloteca</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a1a1a">
+<link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96.png">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+
+<!-- iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mezcaloteca">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+
+<div class="install-banner" id="install-banner">
+  <span>Instalar Mezcaloteca en este dispositivo</span>
+  <div>
+    <button id="install-btn">Instalar</button>
+    <button class="close-banner" id="close-banner" type="button">×</button>
+  </div>
+</div>
+
+<header>
+  <h1>Mezcaloteca</h1>
+  <p class="subtitle"><span id="total">0</span> mezcales · <span id="storage-info">base local</span></p>
+  <div class="header-actions">
+    <button class="btn btn-primary" id="btn-add">+ Agregar mezcal</button>
+    <button class="btn" id="btn-export">↓ Exportar JSON</button>
+    <button class="btn" id="btn-import">↑ Importar JSON</button>
+    <input type="file" id="import-file" accept=".json,application/json" style="display:none">
+  </div>
+</header>
+
+<div class="filters">
+  <div class="filter-row">
+    <div class="filter-group">
+      <label for="search">Buscar</label>
+      <input type="text" id="search" placeholder="Nombre, productor, agave...">
+    </div>
+    <div class="filter-group">
+      <label for="region">Región</label>
+      <select id="region"><option value="">Todas</option></select>
+    </div>
+    <div class="filter-group">
+      <label for="variedad">Variedad</label>
+      <select id="variedad"><option value="">Todas</option></select>
+    </div>
+    <div class="filter-group">
+      <label for="especie">Especie</label>
+      <select id="especie"><option value="">Todas</option></select>
+    </div>
+  </div>
+  <div class="filter-row" style="grid-template-columns: 1fr 1fr 1fr; margin-bottom: 0;">
+    <div class="filter-group">
+      <label for="tipo">Tipo</label>
+      <select id="tipo">
+        <option value="">Todos</option>
+        <option value="monovarietal">Monovarietal</option>
+        <option value="ensamble">Ensamble</option>
+        <option value="pechuga">Pechuga</option>
+        <option value="reposado">Reposado</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="productor">Productor</label>
+      <select id="productor"><option value="">Todos</option></select>
+    </div>
+    <div class="filter-group">
+      <label for="ubicacion">Ubicación</label>
+      <select id="ubicacion">
+        <option value="">Cualquiera</option>
+        <option value="A">Despensa alta</option>
+        <option value="B">Despensa baja</option>
+      </select>
+    </div>
+  </div>
+  <div class="filter-actions">
+    <div class="result-count"><strong id="count">0</strong> mezcales</div>
+    <button class="btn" id="reset">Limpiar filtros</button>
+  </div>
+</div>
+
+<div class="cards" id="cards"></div>
+
+<div class="legend">
+  <div class="legend-item"><span class="badge badge-alta">A</span> Despensa alta</div>
+  <div class="legend-item"><span class="badge badge-baja">B</span> Despensa baja</div>
+</div>
+
+</div>
+
+<!-- Modal del formulario -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modal-title">Agregar mezcal</h2>
+      <button class="modal-close" id="modal-close" type="button">×</button>
+    </div>
+    <form id="mezcal-form">
+      <div class="form-group">
+        <label for="f-nombre">Nombre <span class="req">*</span></label>
+        <input type="text" id="f-nombre" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-productor">Productor</label>
+          <input type="text" id="f-productor" list="dl-productores">
+          <datalist id="dl-productores"></datalist>
+        </div>
+        <div class="form-group">
+          <label for="f-comunidad">Comunidad / pueblo</label>
+          <input type="text" id="f-comunidad" list="dl-comunidades">
+          <datalist id="dl-comunidades"></datalist>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-region">Región <span class="req">*</span></label>
+          <select id="f-region" required>
+            <option value="">—</option>
+            <option value="Oaxaca">Oaxaca</option>
+            <option value="Jalisco">Jalisco</option>
+            <option value="Michoacán">Michoacán</option>
+            <option value="Durango">Durango</option>
+            <option value="Guerrero">Guerrero</option>
+            <option value="Puebla">Puebla</option>
+            <option value="San Luis Potosí">San Luis Potosí</option>
+            <option value="Zacatecas">Zacatecas</option>
+            <option value="Guanajuato">Guanajuato</option>
+            <option value="Otra">Otra</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-ub">Ubicación <span class="req">*</span></label>
+          <select id="f-ub" required>
+            <option value="A">Despensa alta</option>
+            <option value="B">Despensa baja</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="f-agave">Agave (texto libre)</label>
+        <input type="text" id="f-agave" placeholder="A. angustifolia, ensamble, etc.">
+      </div>
+      <div class="form-group">
+        <label>Variedades / nombres comunes</label>
+        <div class="chips-input" id="chips-variedades">
+          <input type="text" placeholder="Escribí y Enter (ej: Espadín)" list="dl-variedades">
+        </div>
+        <datalist id="dl-variedades"></datalist>
+        <div class="form-hint">Espadín, Tobalá, Bicuixe, Madrecuishe, Tepeztate, etc.</div>
+      </div>
+      <div class="form-group">
+        <label>Especies científicas</label>
+        <div class="chips-input" id="chips-especies">
+          <input type="text" placeholder="Escribí y Enter (ej: angustifolia)" list="dl-especies">
+        </div>
+        <datalist id="dl-especies"></datalist>
+      </div>
+      <div class="form-group">
+        <label>Tipos</label>
+        <div class="chips-input" id="chips-tipos">
+          <input type="text" placeholder="monovarietal / ensamble / pechuga / reposado" list="dl-tipos">
+        </div>
+        <datalist id="dl-tipos">
+          <option value="monovarietal">
+          <option value="ensamble">
+          <option value="pechuga">
+          <option value="reposado">
+        </datalist>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-grado">Grado alcohólico</label>
+          <input type="text" id="f-grado" placeholder="47° / —">
+        </div>
+        <div class="form-group">
+          <label for="f-num">N° (opcional)</label>
+          <input type="number" id="f-num" placeholder="Auto si está vacío">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="f-notas">Notas técnicas</label>
+        <textarea id="f-notas" placeholder="Tahona, alambique, años, maderas de horno..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Foto de la botella</label>
+        <div class="photo-upload">
+          <div class="photo-preview" id="photo-preview"><span>sin foto</span></div>
+          <div class="photo-buttons">
+            <label class="file-btn" for="f-foto">Elegir foto</label>
+            <input type="file" id="f-foto" accept="image/*" style="display:none">
+            <button type="button" class="file-btn" id="btn-remove-photo">Quitar</button>
+          </div>
+        </div>
+        <div class="form-hint">Se comprime automáticamente (~50KB).</div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Lightbox de foto -->
+<div class="lightbox" id="lightbox"><img id="lightbox-img" alt=""></div>
+
+<!-- Toast de notificaciones -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
